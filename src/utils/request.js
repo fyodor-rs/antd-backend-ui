@@ -8,9 +8,10 @@ import {
 import {
   notification
 } from 'antd';
-import 
-  {Storage}
- from '@/utils/storage';
+import {
+  Storage
+}
+from '@/utils/storage';
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -68,16 +69,17 @@ const request = extend({
 //所有的请求带上token
 request.interceptors.request.use(async (url, options) => {
   let storage = new Storage();
-  let name = storage.getItem('nickname');
-  let token = storage.getItem(name.value);
-  const headers = {
-    'Authorization': 'Bearer '+token.value
-  };
+  let name = storage.getItem('nickname')
+  let token = storage.getItem(name ? name.value : null);
   if (token) {
+    const headers = {
+      'Authorization': 'Bearer ' + token.value
+    };
     return ({
-      url: `${url}?nickname=${name.value}`,
+      url: url,
       options: {
         ...options,
+        useCache:false,
         headers: headers
       }
     })

@@ -21,7 +21,6 @@ const Model = {
         type: 'changeLoginStatus',
         payload: response,
       });
-      
       if (response.success) {
         //保存token和用户信息
          let storage=new Storage();

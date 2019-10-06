@@ -21,7 +21,7 @@ class Storage {
     keys.forEach((key) => {
       let value = list[key];
       if (this.isRemove(value)) {
-        localStorage.removeItem(name)
+        localStorage.removeItem(key)
       }
     })
   }

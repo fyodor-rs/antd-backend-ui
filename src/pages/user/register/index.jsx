@@ -2,21 +2,15 @@ import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
 import React, { Component } from 'react';
 import Link from 'umi/link';
 import { connect } from 'dva';
-import LoginComponents from './components/Login';
 import styles from './style.less';
-// import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import {
   Alert,
   Form,
   Input,
-  Icon,
   Select,
-  Checkbox,
   Button,
-  AutoComplete,
 } from 'antd';
 const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
 
 @connect(({ register, loading }) => ({
   userRegister: register,
@@ -77,9 +71,7 @@ class Register extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
-    const { userRegister, submitting } = this.props;
-    const { success,message} = userRegister;
+    // const { userRegister, submitting } = this.props;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -111,10 +103,6 @@ class Register extends Component {
       </Select>,
     );
 
-    // const websiteOptions = autoCompleteResult.map(website => (
-    //   <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-    // ));
-    
     return (
       <Form className={styles.main} {...formItemLayout} onSubmit={this.handleSubmit}>
           <Form.Item>

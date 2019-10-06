@@ -2,10 +2,15 @@ import defaultSettings from './defaultSettings'; // https://umijs.org/config/
 
 import slash from 'slash2';
 import webpackPlugin from './plugin.config';
-const { pwa, primaryColor } = defaultSettings; // preview.pro.ant.design only do not use in your production ;
+const {
+  pwa,
+  primaryColor
+} = defaultSettings; // preview.pro.ant.design only do not use in your production ;
 // preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
 
-const { ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION } = process.env;
+const {
+  ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION
+} = process.env;
 const isAntDesignProPreview = ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION === 'site';
 const plugins = [
   [
@@ -28,14 +33,12 @@ const plugins = [
       //   webpackChunkName: true,
       //   level: 3,
       // },
-      pwa: pwa
-        ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
-        : false, // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
+      pwa: pwa ? {
+        workboxPluginMode: 'InjectManifest',
+        workboxOptions: {
+          importWorkboxFrom: 'local',
+        },
+      } : false, // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
       // dll: {
       //   include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
@@ -82,12 +85,10 @@ export default {
   },
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
-  routes: [
-    {
+  routes: [{
       path: '/user',
       component: '../layouts/UserLayout',
-      routes: [
-        {
+      routes: [{
           name: 'login',
           path: '/user/login',
           component: './user/login',
@@ -102,13 +103,11 @@ export default {
     {
       path: '/',
       component: '../layouts/SecurityLayout',
-      routes: [
-        {
+      routes: [{
           path: '/',
           component: '../layouts/BasicLayout',
           // authority: ['admin', 'user'],
-          routes: [
-            {
+          routes: [{
               path: '/',
               redirect: '/home',
             },
@@ -129,6 +128,12 @@ export default {
               name: 'Post',
               icon: 'read',
               component: './post/posts.jsx',
+              // routes: [{
+              //   path: '/myEditor',
+              //   name: 'MyEditor',
+              //   icon: 'read',
+              //   component: './post/MyEditor.jsx',
+              // }]
             },
             {
               component: './404',
@@ -149,8 +154,7 @@ export default {
     'primary-color': primaryColor,
   },
   define: {
-    ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
-      ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
+    ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION: ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
   },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
@@ -190,7 +194,9 @@ export default {
     '/server': {
       target: 'http://localhost:3333/',
       changeOrigin: true,
-      pathRewrite: { '^/server': '' },
+      pathRewrite: {
+        '^/server': ''
+      },
     }
   },
 };

@@ -37,7 +37,6 @@ const Model = {
             search: stringify({
               redirect: window.location.href,
             }),
-            query: {asd: 'asd'}
           }),
         );
         message.success('注册成功！');

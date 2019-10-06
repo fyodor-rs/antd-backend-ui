@@ -1,41 +1,45 @@
-import { List, Avatar } from 'antd';
+import { Table } from 'antd';
+import React, { Component } from 'react';
+import { connect } from 'dva';
 
-const data = [
-  {
-    title: 'Ant Design Title 1',
-    title1: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 2',
-    titl1: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 3',
-    title1: 'Ant Design Title 1',
-  },
-  {
-    title: 'Ant Design Title 4',
-    title1: 'Ant Design Title 1',
-  },
-];
+@connect(({ user, loading }) => ({
+  userList: user.userList,
+  submitting: loading.effects['register/register'],
+}))
+class UserList extends Component {
+  componentDidMount(){
+    const { dispatch } = this.props;
+    dispatch({
+      type:'user/fetchUsers'
+    })
+  }
+  render() {
+    const {userList}=this.props
+    const columns = [
+      {
+        title: 'Avatar',
+        dataIndex: 'avatar',
+        render: text => <img style={{width:25,height:25}} src={text}/>
+      },
+      {
+        title: 'Name',
+        dataIndex: 'nickname',
+      },
+      {
+        title: 'Email',
+        dataIndex: 'email',
+      },
+      {
+        title: 'Phone',
+        dataIndex: 'phone',
+      },
+    ];
+    return (
+      <div>
+        <Table columns={columns} dataSource={userList} size="middle" />
+      </div>
+    );
+  }
+}
 
-const header=[
-  'asd','asd','asd','asd'
-]
-
-export default () => (
-  <List
-    itemLayout="horizontal"
-    header={header}
-    dataSource={data}
-    renderItem={item => (
-      <List.Item>
-        <List.Item.Meta
-          avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-          title={<a href="https://ant.design">{item.title}</a>}
-          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-        />
-      </List.Item>
-    )}
-  ></List>
-);
+export default UserList;
