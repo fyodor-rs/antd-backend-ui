@@ -37,6 +37,7 @@ const errorHandler = error => {
   const {
     response
   } = error;
+  console.log(response)
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const {
@@ -44,8 +45,9 @@ const errorHandler = error => {
       url
     } = response;
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
+      // message: `请求错误 ${status}: ${url}`,
+      // description: errorText,
+      message:errorText
     });
   } else if (!response) {
     notification.error({

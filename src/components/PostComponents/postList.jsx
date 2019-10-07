@@ -1,7 +1,8 @@
-import { List, Card, Avatar, Icon, Button } from 'antd';
+import { List, Card, Avatar, Icon, Menu, Dropdown, Button } from 'antd';
 import React, { Component } from 'react';
 import styles from './style.less';
-import {ButtonOne,ButtonTwo,ButtonThree} from './Search'
+import MyEditor from '@/components/PostComponents/myEditor';
+import { connect } from 'dva';
 const listData = [];
 for (let i = 0; i < 23; i++) {
   listData.push({
@@ -20,17 +21,55 @@ const IconText = ({ type, text }) => (
     {text}
   </span>
 );
-
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+        1st menu item
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+        2nd menu item
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+        3rd menu item
+      </a>
+    </Menu.Item>
+  </Menu>
+);
+@connect(({ post, loading }) => ({
+  postList: post.postList,
+}))
 class postList extends Component {
-    render() {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'post/queryPost',
+    });
+  }
+  render() {
+    const postList = this.props.postList;
     return (
       <div>
         <Card className={styles.header}>
-        <ButtonOne></ButtonOne>
-        <ButtonTwo></ButtonTwo> 
-        <ButtonThree></ButtonThree> 
-        <Button type="primary" onClick={()=>{this.props.changePage(true)}} className={styles.newButton}>写博客</Button>
+            <MyEditor />
+              <Dropdown className={styles.dropdownButton} overlay={menu} placement="bottomLeft">
+            <Button style={{backgroundColor:'gray'}} type="primary"><Icon type="user" />作者</Button>
+          </Dropdown>
+          <Dropdown className={styles.dropdownButton} overlay={menu} placement="bottomLeft">
+            <Button style={{backgroundColor:'gray'}} type="primary"><Icon type="bars" />分类</Button>
+          </Dropdown>
+          <Dropdown className={styles.dropdownButton} overlay={menu} placement="bottomLeft">
+            <Button style={{backgroundColor:'gray'}} type="primary"><Icon type="tag" />标签</Button>
+          </Dropdown>
+        
+        
+          {/* <Button type="primary" className={styles.newButton}>写博客</Button> */}
         </Card>
+        <Card bodyStyle={{padding:10}}>
         <List
           split={true}
           itemLayout="vertical"
@@ -40,37 +79,46 @@ class postList extends Component {
               console.log(page);
             },
             pageSize: 4,
-            style:{textAlign:"center"}
+            style: { textAlign: 'center'},
           }}
-          dataSource={listData}
+          dataSource={postList}
           renderItem={item => (
             <List.Item
               style={{ padding: 10, paddingLeft: 15 }}
               key={item.title}
-              actions={[
-                <IconText type="star-o" text="156" key="list-vertical-star-o" />,
-                <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-                <IconText type="message" text="2" key="list-vertical-message" />,
-              ]}
+              // actions={[
+              //   <IconText type="star-o" text="156" key="list-vertical-star-o" />,
+              //   <IconText type="like-o" text="156" key="list-vertical-like-o" />,
+              //   <IconText type="message" text="2" key="list-vertical-message" />,
+              // ]}
               extra={
                 <img
-                  width={272}
+                  width={50}
+                  height={50}
                   alt="logo"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                  src={item.img}
                 />
               }
             >
               <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<a href={item.href}>{item.title}</a>}
-                description={item.description}
+                avatar={<Avatar src={item.user.avatar} />}
+                title={
+                  <a
+                    onClick={() => {
+                      this.props.changePage(true,item);
+                    }}
+                  >
+                    {item.title}
+                  </a>
+                }
+                description={item.describe}
               />
-              {item.content}
+              {/* {item.content} */}
             </List.Item>
           )}
-        />
+        /></Card>
       </div>
-      )
+    );
   }
 }
 

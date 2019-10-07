@@ -23,9 +23,7 @@ const Model = {
       call,
       put
     }) {
-      console.log(payload)
       const response = yield call(register, payload);
-      console.log(response)
       yield put({
         type: 'changeRegisterStatus',
         payload: response,
