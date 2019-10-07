@@ -26,14 +26,6 @@ class PostContent extends Component {
           >
             返回
           </Button>
-          <Button
-            type="primary"
-            onClick={() => {
-              this.props.changePage(false);
-            }}
-          >
-            返回
-          </Button>
         </Card>
       </div>
     );
