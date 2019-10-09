@@ -1,26 +1,11 @@
-import { List, Card, Avatar, Icon, Menu, Dropdown, Button } from 'antd';
+import { List,Input,Modal, Card, Avatar, Icon, Menu, Dropdown, Button ,Table ,Tag,Divider} from 'antd';
 import React, { Component } from 'react';
 import styles from './style.less';
 import MyEditor from '@/components/PostComponents/myEditor';
 import { connect } from 'dva';
-const listData = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `ant design part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-      'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-      'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
-const IconText = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);
+import Link from 'umi/link';
+const { confirm } = Modal;
+const { Search } = Input;
 const menu = (
   <Menu>
     <Menu.Item>
@@ -45,81 +30,162 @@ const menu = (
 }))
 class postList extends Component {
   componentDidMount() {
-    const { dispatch } = this.props;
+    this.queryPostOptions();
+  }
+  queryPostOptions=()=>{
+     const { dispatch } = this.props;
     dispatch({
       type: 'post/queryPost',
     });
   }
+  deleteOptions=(id)=>{
+    const {dispatch} =this.props
+    dispatch({
+      type:"post/deletePost",
+      payload:{'_id':id}
+    })
+    this.queryPostOptions();
+  }
+   showConfirm=(value)=> {
+      confirm({
+        title: `Are you sure want to delete the post '${value.title}' ?`,
+        content: 'It can never be restored after deletion......',
+        width:500,
+        onOk:()=> {
+          this.deleteOptions(value._id)
+        },
+        onCancel() {},
+      });
+    }
+    queryPostBySearch=(search)=>{
+      const {dispatch} =this.props
+      dispatch({
+        type:"post/queryPostBySearch",
+        payload:search
+      })
+    }
   render() {
     const postList = this.props.postList;
+    const columns = [
+      {
+        title: 'Avatar',
+        dataIndex: 'user',
+        key: 'avatar',
+        render: text => <a><Avatar src={text.avatar}/></a>,
+      },
+      {
+        title: 'Name',
+        dataIndex: 'user',
+        key: 'name',
+        render: text => <a>{text.nickname}</a>,
+      },
+      {
+        title: 'Title',
+        dataIndex: 'title',
+        key: 'title',
+      },
+      {
+        title: 'Category',
+        dataIndex: 'category',
+        key: 'category',
+      },
+      {
+        title: 'Tags',
+        key: 'tags',
+        dataIndex: 'label',
+        render: labels => (
+          <span>
+            {labels.map(tag => {
+              let color = tag.length > 5 ? 'geekblue' : 'green';
+              if (tag === 'loser') {
+                color = 'volcano';
+              }
+              return (
+                <Tag color={color} key={tag}>
+                  {tag.toUpperCase()}
+                </Tag>
+              );
+            })}
+          </span>
+        ),
+      },
+      {
+        title: 'Action',
+        key: 'action',
+        render: (text, record) => (
+          <span>
+            <Link to={`/posts/${record._id}`}>Detail </Link>
+            <Divider type="vertical" />
+            <a onClick={()=>{this.showConfirm(record)}}>Delete</a>
+          </span>
+        ),
+      },
+    ];
+    
     return (
       <div>
-        <Card className={styles.header}>
+        
+        <Card className={styles.header} bodyStyle={{padding:20}}>
+        <Search style={{width:'20em'}} placeholder="input search text" onSearch={value => this.queryPostBySearch(value)} enterButton />
             <MyEditor />
               <Dropdown className={styles.dropdownButton} overlay={menu} placement="bottomLeft">
-            <Button style={{backgroundColor:'gray'}} type="primary"><Icon type="user" />作者</Button>
+            <Button ><Icon type="user" />作者</Button>
           </Dropdown>
           <Dropdown className={styles.dropdownButton} overlay={menu} placement="bottomLeft">
-            <Button style={{backgroundColor:'gray'}} type="primary"><Icon type="bars" />分类</Button>
+            <Button ><Icon type="bars" />分类</Button>
           </Dropdown>
           <Dropdown className={styles.dropdownButton} overlay={menu} placement="bottomLeft">
-            <Button style={{backgroundColor:'gray'}} type="primary"><Icon type="tag" />标签</Button>
+            <Button ><Icon type="tag" />标签</Button>
           </Dropdown>
-        
-        
-          {/* <Button type="primary" className={styles.newButton}>写博客</Button> */}
+          
         </Card>
-        <Card bodyStyle={{padding:10}}>
-        <List
-          split={true}
-          itemLayout="vertical"
-          size="large"
-          pagination={{
-            onChange: page => {
-              console.log(page);
-            },
-            pageSize: 4,
-            style: { textAlign: 'center'},
-          }}
-          dataSource={postList}
-          renderItem={item => (
-            <List.Item
-              style={{ padding: 10, paddingLeft: 15 }}
-              key={item.title}
-              // actions={[
-              //   <IconText type="star-o" text="156" key="list-vertical-star-o" />,
-              //   <IconText type="like-o" text="156" key="list-vertical-like-o" />,
-              //   <IconText type="message" text="2" key="list-vertical-message" />,
-              // ]}
-              extra={
-                <img
-                  width={50}
-                  height={50}
-                  alt="logo"
-                  src={item.img}
-                />
-              }
-            >
-              <List.Item.Meta
-                avatar={<Avatar src={item.user.avatar} />}
-                title={
-                  <a
-                    onClick={() => {
-                      this.props.changePage(true,item);
-                    }}
-                  >
-                    {item.title}
-                  </a>
-                }
-                description={item.describe}
-              />
-              {/* {item.content} */}
-            </List.Item>
-          )}
-        /></Card>
+        <Table columns={columns} dataSource={postList} />
+
       </div>
     );
   }
 }
 
 export default postList;
+  // <Card bodyStyle={{padding:10}}>
+  //       <List
+  //         split={true}
+  //         itemLayout="vertical"
+  //         size="large"
+  //         pagination={{
+  //           onChange: page => {
+  //             console.log(page);
+  //           },
+  //           pageSize: 4,
+  //           style: { textAlign: 'center',marginTop:-14},
+  //         }}
+  //         dataSource={postList}
+  //         renderItem={item => (
+  //           <List.Item
+  //             style={{ padding: 10, paddingLeft: 15 }}
+  //             key={item.title}
+  //             // actions={[
+  //             //   <IconText type="star-o" text="156" key="list-vertical-star-o" />,
+  //             //   <IconText type="like-o" text="156" key="list-vertical-like-o" />,
+  //             //   <IconText type="message" text="2" key="list-vertical-message" />,
+  //             // ]}
+  //             extra={
+  //               <img
+  //                 width={80}
+  //                 height={80}
+  //                 alt="logo"
+  //                 src={item.img}
+  //               />
+  //             }
+  //           >
+  //             <List.Item.Meta
+  //               avatar={<Avatar src={item.user.avatar} />}
+  //               title={
+  //                 <Link to={`/posts/${item._id}`}>{item.title} </Link>
+  //               }
+  //               description={item.describe}
+  //             />
+  //             {/* {item.content} */}
+  //           </List.Item>
+  //         )}
+  //       /></Card>

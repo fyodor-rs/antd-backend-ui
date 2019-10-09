@@ -4,6 +4,9 @@ export async function queryPost(params) {
     method: 'get',
   });
 }
+export async function queryPostBySearch(params) {
+  return request(`/server/post/list/${params}`)
+}
 export async function addPost(params) {
   return request(`/server/post/add`,{
       method: 'POST',
@@ -11,13 +14,13 @@ export async function addPost(params) {
   });
 }
 export async function deletePost(params) {
-    return request('/server/post/edit', {
+    return request('/server/post/delete', {
       method: 'POST',
       data: params,
     });
   }
   export async function editPost(params) {
-    return request(`/server/post/delete`,{
+    return request(`/server/post/edit`,{
         method: 'POST',
         data: params,
     });

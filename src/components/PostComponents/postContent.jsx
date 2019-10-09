@@ -1,31 +1,23 @@
 import react, { Component } from 'react';
 import { Button, Card } from 'antd';
 import { connect } from 'dva';
-@connect(({ post, loading }) => ({}))
+@connect(({ post, loading }) => ({
+  postInfo:post.post
+}))
 class PostContent extends Component {
   componentDidMount() {
-    // const { dispatch, postId } = this.props;
-    // dispatch({
-    //   type: 'post/getPostById',
-    //   payload: postId,
-    // });
+    const {dispatch, match } = this.props;
+    dispatch({
+      type: 'post/getPostById',
+      payload: match.params.id,
+    });
   }
   render() {
-    const { postId } = this.props;
+    const {postInfo}=this.props
     return (
-      <div style={{ height: 500 }}>
+      <div>
         <Card>
-          <div dangerouslySetInnerHTML={{ __html: postId.htmlContent }}></div>
-        </Card>
-        <Card>
-          <Button
-            type="primary"
-            onClick={() => {
-              this.props.changePage(false);
-            }}
-          >
-            返回
-          </Button>
+          <div style={{wordBreak: 'break-all',whiteSpace: 'pre-wrap'}} dangerouslySetInnerHTML={{ __html: postInfo?postInfo.htmlContent:'' }}></div>
         </Card>
       </div>
     );

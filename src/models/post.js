@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { stringify } from 'querystring';
-import { queryPost, addPost,deletePost,editPost ,getPostById} from '@/services/post';
+import { queryPost, queryPostBySearch, addPost,deletePost,editPost ,getPostById} from '@/services/post';
 import { getPageQuery } from '@/utils/utils';
 import  {Storage}  from '@/utils/storage';
 import {
@@ -20,10 +20,18 @@ const Model = {
         payload: response,
       });
     },
+    *queryPostBySearch({payload},{call,put}){
+      console.log(payload);
+      const response=  yield call(queryPostBySearch,payload);
+      yield put({
+        type: 'savePostList',
+        payload: response,
+      });
+    },
     *getPostById({payload},{call,put}){
       const response=  yield call(getPostById,payload);
       yield put({
-        type: 'savePostList',
+        type: 'savePostInfo',
         payload: response,
       });
     },
@@ -36,8 +44,13 @@ const Model = {
       }
     },
 
-    *deletePost( payload , {call, put }) {
-      
+    *deletePost( {payload}, {call, put }) {
+      const response=  yield call(deletePost,payload);
+      if(response.success){
+        message.success(response.message,2);
+      }else{
+        message.error(response.message);
+      }
     },
 
     editPost({payload},{call,put}){

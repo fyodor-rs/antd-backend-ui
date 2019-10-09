@@ -66,8 +66,8 @@ class MyEditor extends React.Component {
       wrapperCol: { span: 19 },
     };
     return (
-      <div style={{ float: 'right' }}>
-        <Button type="primary" className={styles.newButton} onClick={this.showModal}>
+      <div style={{ float: 'right',display:'inline-block' }} >
+        <Button onClick={this.showModal}>
         <Icon type="form" />写博客
         </Button>
 

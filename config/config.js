@@ -128,13 +128,14 @@ export default {
               name: 'Post',
               icon: 'read',
               component: './post/posts.jsx',
-              // routes: [{
-              //   path: '/myEditor',
-              //   name: 'MyEditor',
-              //   icon: 'read',
-              //   component: './post/MyEditor.jsx',
-              // }]
             },
+             {
+                  path: '/posts/:id',
+                  name: 'postContent',
+                  hideInMenu:true,
+                  icon: 'read',
+                  component: '../components/PostComponents/postContent.jsx',
+              },
             {
               component: './404',
             },

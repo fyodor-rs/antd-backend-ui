@@ -8,3 +8,13 @@ export async function queryCurrent(name) {
 export async function queryNotices() {
   return request('/api/notices');
 }
+export async function queryUserBySearch(params) {
+  return request(`/server/users/${params}`)
+}
+export async function deleteUser(params) {
+  return request('/server/user/delete', {
+    method: 'POST',
+    data: params,
+  });
+}
+

@@ -1,6 +1,8 @@
 import {
   queryCurrent,
-  query as queryUsers
+  query as queryUsers,
+  queryUserBySearch,
+  deleteUser
 } from '@/services/user';
 import {
   Storage
@@ -11,6 +13,9 @@ import {
 import {
   stringify
 } from 'querystring';
+import {
+  message
+} from 'antd';
 const UserModel = {
   namespace: 'user',
   state: {
@@ -18,6 +23,21 @@ const UserModel = {
     userInfo: ''
   },
   effects: {
+    * deleteUser({payload},{call,put}){
+      const response = yield call(deleteUser,payload);
+      if(response.success){
+        message.success(response.message,2);
+      }else{
+        message.error(response.message);
+      }
+    },
+    * queryUserBySearch({payload},{call,put}){
+      const response = yield call(queryUserBySearch,payload);
+      yield put({
+        type: 'changeUserLsit',
+        payload: response.data,
+      });
+    },
     * fetchUsers(_, {
       call,
       put
@@ -36,7 +56,7 @@ const UserModel = {
       let storage = new Storage();
       let name = storage.getItem('nickname');
       const response = yield call(queryCurrent, name ? name.value : null);
-      if (response.success) {
+      if (response.success&&response.data) {
         yield put({
           type: 'saveCurrentUser',
           payload: response.data,
