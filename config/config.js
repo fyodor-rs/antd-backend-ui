@@ -136,6 +136,12 @@ export default {
                   icon: 'read',
                   component: '../components/PostComponents/postContent.jsx',
               },
+              {
+                path: '/setting',
+                name: 'Setting',
+                icon: 'setting',
+                component: './user/setting',
+              },
             {
               component: './404',
             },
