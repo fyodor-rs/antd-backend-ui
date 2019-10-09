@@ -22,15 +22,16 @@ class PieEcharts extends Component {
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
             },
             legend: {
-                // orient: 'vertical',
-                // x: 'left',
-                // data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
-                data:['搜索引擎']
+                orient: 'vertical',
+                x: 'left',
+                data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+                // data:['搜索引擎']
             },
             series: [
                 {
                     name:'访问来源',
                     type:'pie',
+                    center:['50%', '60%'],
                     radius: ['50%', '70%'],
                     avoidLabelOverlap: false,
                     label: {
@@ -41,7 +42,7 @@ class PieEcharts extends Component {
                         emphasis: {
                             show: true,
                             textStyle: {
-                                fontSize: '30',
+                                fontSize: '13',
                                 fontWeight: 'bold'
                             }
                         }
@@ -65,7 +66,7 @@ class PieEcharts extends Component {
     render() {
         // console.log(this.props);
         return (
-            <div id={this.props.id} style={{ width: '15em', height: '15em' }}></div>
+            <div id={this.props.id} style={{ width: '100%', height: '100%' }}></div>
         );
     }
 }

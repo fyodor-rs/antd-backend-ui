@@ -10,8 +10,8 @@ class HighCharts extends React.Component{
         type: 'spline'
     },
     title: {
-      // align: 'left',
-        text: '两地月平均温度'
+        align: 'left',
+        text: '访客人数'
     },
     // subtitle: {
     //     text: '数据来源: WorldClimate.com'
@@ -22,7 +22,7 @@ class HighCharts extends React.Component{
     },
     yAxis: {
         title: {
-            text: '温度'
+            text: '流量'
         },
         labels: {
             formatter: function () {
@@ -73,7 +73,7 @@ class HighCharts extends React.Component{
 
   render() {
     return (
-      <div ref="alarmHighChart" style={{width:'65em',height:400}} />
+      <div ref="alarmHighChart" style={{width:'100%',height:400}} />
     );
   }
 
