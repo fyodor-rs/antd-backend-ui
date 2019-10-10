@@ -147,6 +147,7 @@ class MyEditor extends React.Component {
                 contentStyle={{ height: 280 }}
                 value={this.state.editorState}
                 onChange={this.handleChange}
+                // allowPasteImage= "true"
               />
             </Card>
           </Form>

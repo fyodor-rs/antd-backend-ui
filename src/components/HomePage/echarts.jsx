@@ -31,7 +31,7 @@ class PieEcharts extends Component {
                 {
                     name:'访问来源',
                     type:'pie',
-                    center:['50%', '60%'],
+                    center:['60%', '60%'],
                     radius: ['50%', '70%'],
                     avoidLabelOverlap: false,
                     label: {
