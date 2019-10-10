@@ -1,14 +1,20 @@
 import 'braft-editor/dist/index.css';
 import React from 'react';
 import BraftEditor from 'braft-editor';
-import { Button, Card, Form, Modal, Select, Input,Icon } from 'antd';
+import { Button, Card, Form, Modal, Select, Input, Icon, Row, Col } from 'antd';
 import { convertToRaw } from 'draft-js';
 import styles from './style.less';
 import { connect } from 'dva';
 import draftToHtml from 'draftjs-to-html';
-import fileUtil from '@/utils/fileUtil'
+import fileUtil from '@/utils/fileUtil';
 const { Option } = Select;
 const { TextArea } = Input;
+
+const children = [];
+for (let i = 10; i < 36; i++) {
+  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
+}
+
 @connect(({ post, user, loading }) => ({
   currentUser: user.currentUser,
 }))
@@ -24,16 +30,16 @@ class MyEditor extends React.Component {
       visible: true,
     });
   };
-  handleSubmit  = () => {
+  handleSubmit = () => {
     this.setState({ loading: true });
     const rawContent = convertToRaw(this.state.editorState.getCurrentContent());
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         Object.assign(this.state.postContent, {
-           ...values,
+          ...values,
           rawContent: JSON.stringify(rawContent),
           htmlContent: this.state.editorState.toHTML(),
-          user: this.props.currentUser._id
+          user: this.props.currentUser._id,
         });
         this.props.dispatch({
           type: 'post/addPost',
@@ -45,7 +51,7 @@ class MyEditor extends React.Component {
         this.setState({ visible: false });
         this.props.form.resetFields();
       }
-        this.setState({ loading: false});
+      this.setState({ loading: false });
     });
   };
 
@@ -67,16 +73,17 @@ class MyEditor extends React.Component {
       wrapperCol: { span: 19 },
     };
     return (
-      <div style={{ float: 'right',display:'inline-block' }} >
+      <div style={{ float: 'right', display: 'inline-block' }}>
         <Button onClick={this.showModal}>
-        <Icon type="form" />写博客
+          <Icon type="form" />
+          写博客
         </Button>
 
         <Modal
           visible={visible}
           title="新建"
           width={900}
-          style={{ top: 40,left:100 }}
+          style={{ top: 40, left: 100 }}
           bodyStyle={{ padding: 0 }}
           onOk={this.handleOk}
           // closable={true}
@@ -91,65 +98,73 @@ class MyEditor extends React.Component {
             </Button>,
           ]}
         >
-          <Form {...formItemLayout} style={{ display: 'flex' }}>
-            <Card bodyStyle={{ padding: 20, height: 100, width: 300 }}>
-              <Form.Item label="Title" hasFeedback>
-                {getFieldDecorator('title', {
-                  rules: [{ required: true, message: 'Please enter the title!' }],
-                })(<Input placeholder="Please enter the title."></Input>)}
-              </Form.Item>
-
-              <Form.Item label="Sort" hasFeedback>
-                {getFieldDecorator('category', {
-                  rules: [{ required: true, message: 'Please select categories!' }],
-                })(
-                  <Select placeholder="Please select categories.">
-                    <Option value="Technology">Technology</Option>
-                    <Option value="Entertainment">Entertainment</Option>
-                    <Option value="Gossip">Gossip</Option>
-                  </Select>,
-                )}
-              </Form.Item>
-
-              <Form.Item label="Label">
-                {getFieldDecorator('label', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please select the label!',
-                      type: 'array',
-                    },
-                  ],
-                })(
-                  <Select mode="multiple" placeholder="Please select the label.">
-                    <Option value="HTMl">HTMl</Option>
-                    <Option value="CSS">CSS</Option>
-                    <Option value="JavaScript">JavaScript</Option>
-                    <Option value="Vue">Vue</Option>
-                    <Option value="React">React</Option>
-                    <Option value="Node">Node</Option>
-                  </Select>,
-                )}
-              </Form.Item>
-
-              <Form.Item label="Desc" hasFeedback>
-                {getFieldDecorator('describe', {
-                  rules: [{ message: 'Please enter a description.!' }],
-                })(
-                  <TextArea
-                    autosize={{ minRows: 6 }}
-                    placeholder="Please enter a description."
-                  ></TextArea>,
-                )}
-              </Form.Item>
+          <Form {...formItemLayout}>
+            <Card bodyStyle={{ paddingBottom: 0, paddingTop: 10 }}>
+              <Row gutter={8}>
+                <Col span={8}>
+                  <Form.Item className={styles.formItem} label="Title" hasFeedback>
+                    {getFieldDecorator('title', {
+                      rules: [{ required: true, message: 'Please enter the title!' }],
+                    })(<Input placeholder="Please enter the title."></Input>)}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item className={styles.formItem} label="Sort" hasFeedback>
+                    {getFieldDecorator('category', {
+                      rules: [{ required: true, message: 'Please select categories!' }],
+                    })(
+                      <Select placeholder="Please select categories.">
+                        <Option value="Technology">Technology</Option>
+                        <Option value="Entertainment">Entertainment</Option>
+                        <Option value="Gossip">Gossip</Option>
+                      </Select>,
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item className={styles.formItem} label="Label">
+                    {getFieldDecorator('label', {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Please select the label!',
+                          type: 'array',
+                        },
+                      ],
+                    })(
+                      <Select
+                        mode="tags"
+                        // size={size}
+                        placeholder="Please select"
+                        defaultValue={['a10', 'c12']}
+                        // onChange={handleChange}
+                        style={{ width: '100%' }}
+                      >
+                        {children}
+                      </Select>,
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item label="Desc" className={styles.formItem} hasFeedback>
+                    {getFieldDecorator('describe', {
+                      rules: [{ message: 'Please enter a description.' }],
+                    })(
+                      <TextArea
+                        autosize={{ minRows: 2 }}
+                        placeholder="Please enter a description."
+                      ></TextArea>,
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
             </Card>
             <Card bodyStyle={{ padding: 0 }}>
               <BraftEditor
-                contentStyle={{ height: 280 }}
+                contentStyle={{ height: 220 }}
                 value={this.state.editorState}
                 onChange={this.handleChange}
-                media={{uploadFn: fileUtil}}
-                // allowPasteImage= "true"
+                media={{ uploadFn: fileUtil }}
               />
             </Card>
           </Form>

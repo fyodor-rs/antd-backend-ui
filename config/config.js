@@ -127,7 +127,13 @@ export default {
               path: '/posts',
               name: 'Post',
               icon: 'read',
-              component: './post/posts.jsx',
+              component: './post',
+            },
+            {
+              path: '/label',
+              name: 'Label',
+              icon: 'read',
+              component: './label',
             },
              {
                   path: '/posts/:id',
