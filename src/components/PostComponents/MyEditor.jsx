@@ -6,6 +6,7 @@ import { convertToRaw } from 'draft-js';
 import styles from './style.less';
 import { connect } from 'dva';
 import draftToHtml from 'draftjs-to-html';
+import fileUtil from '@/utils/fileUtil'
 const { Option } = Select;
 const { TextArea } = Input;
 @connect(({ post, user, loading }) => ({
@@ -147,6 +148,7 @@ class MyEditor extends React.Component {
                 contentStyle={{ height: 280 }}
                 value={this.state.editorState}
                 onChange={this.handleChange}
+                media={{uploadFn: fileUtil}}
                 // allowPasteImage= "true"
               />
             </Card>
