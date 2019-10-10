@@ -28,9 +28,6 @@ class UserList extends Component {
       type:'user/deleteUser',
       payload:{'_id':id}
     })
-    dispatch({
-      type:'user/fetchUsers'
-    })
   }
   showConfirm=(value)=> {
     confirm({

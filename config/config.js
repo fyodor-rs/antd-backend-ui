@@ -130,10 +130,10 @@ export default {
               component: './post',
             },
             {
-              path: '/label',
-              name: 'Label',
+              path: '/comment',
+              name: 'Comment',
               icon: 'read',
-              component: './label',
+              component: './comment',
             },
              {
                   path: '/posts/:id',

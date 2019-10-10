@@ -1,8 +1,8 @@
-import { routerRedux } from 'dva/router';
-import { stringify } from 'querystring';
-import { queryPost, queryPostBySearch, addPost,deletePost,editPost ,getPostById} from '@/services/post';
-import { getPageQuery } from '@/utils/utils';
-import  {Storage}  from '@/utils/storage';
+// import { routerRedux } from 'dva/router';
+// import { stringify } from 'querystring';
+import { queryPost, queryPostBySearch, addPost,deletePost,editPost ,getPostById,queryTags} from '@/services/post';
+// import { getPageQuery } from '@/utils/utils';
+// import  {Storage}  from '@/utils/storage';
 import {
   message
 } from 'antd';
@@ -10,9 +10,17 @@ const Model = {
   namespace: 'post',
   state: {
     postList:[],
+    tagList:[],
     post:null
   },
   effects: {
+    *queryTags({payload},{call,put}){
+      const response=  yield call(queryTags,payload);
+      yield put({
+        type: 'saveTagList',
+        payload: response,
+      });
+    },
     *queryPost({payload},{call,put}){
       const response=  yield call(queryPost,payload);
       yield put({
@@ -21,7 +29,6 @@ const Model = {
       });
     },
     *queryPostBySearch({payload},{call,put}){
-      console.log(payload);
       const response=  yield call(queryPostBySearch,payload);
       yield put({
         type: 'savePostList',
@@ -38,6 +45,12 @@ const Model = {
     *addPost({ payload }, { call, put }) {
       const response=  yield call(addPost,payload);
       if(response.success){
+        yield put({
+          type: 'queryPost'
+        });
+        yield put({
+          type: 'queryTags'
+        });
         message.success(response.message,2);
       }else{
         message.error(response.message);
@@ -47,6 +60,9 @@ const Model = {
     *deletePost( {payload}, {call, put }) {
       const response=  yield call(deletePost,payload);
       if(response.success){
+        yield put({
+          type: 'queryPost'
+        });
         message.success(response.message,2);
       }else{
         message.error(response.message);
@@ -65,11 +81,9 @@ const Model = {
     savePostInfo(state, { payload }) {
       return { ...state, post: payload.data};
     },
-    // changeLoginInfo(state, { payload }){
-    //     let storage= new Storage();
-    //     const userInfo= storage.getItem('nickname');
-    //     return { ...state,userInfo: userInfo};
-    // }
+    saveTagList(state, { payload }) {
+      return { ...state, tagList: payload.data};
+    },
   },
 };
 export default Model;

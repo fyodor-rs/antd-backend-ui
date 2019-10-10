@@ -26,6 +26,9 @@ const UserModel = {
     * deleteUser({payload},{call,put}){
       const response = yield call(deleteUser,payload);
       if(response.success){
+        yield put({
+          type: 'fetchUsers',
+        });
         message.success(response.message,2);
       }else{
         message.error(response.message);

@@ -9,16 +9,17 @@ import draftToHtml from 'draftjs-to-html';
 import fileUtil from '@/utils/fileUtil';
 const { Option } = Select;
 const { TextArea } = Input;
-
-const children = [];
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
-
 @connect(({ post, user, loading }) => ({
   currentUser: user.currentUser,
+  tagList:post.tagList
 }))
 class MyEditor extends React.Component {
+  componentDidMount(){
+    const {dispatch}= this.props
+    dispatch({
+      type: 'post/queryTags',
+    });
+  }
   state = {
     loading: false,
     visible: false,
@@ -45,9 +46,6 @@ class MyEditor extends React.Component {
           type: 'post/addPost',
           payload: this.state.postContent,
         });
-        this.props.dispatch({
-          type: 'post/queryPost',
-        });
         this.setState({ visible: false });
         this.props.form.resetFields();
       }
@@ -72,6 +70,12 @@ class MyEditor extends React.Component {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
     };
+    const {tagList} = this.props;
+    console.log(tagList);
+    const children=[]
+    for (let i = 0; i < tagList.length; i++) {
+      children.push(<Option key={tagList[i].name}>{tagList[i].name}</Option>);
+    }
     return (
       <div style={{ float: 'right', display: 'inline-block' }}>
         <Button onClick={this.showModal}>
@@ -107,7 +111,7 @@ class MyEditor extends React.Component {
                       rules: [{ required: true, message: 'Please enter the title!' }],
                     })(<Input placeholder="Please enter the title."></Input>)}
                   </Form.Item>
-                </Col>
+                </Col>  
                 <Col span={8}>
                   <Form.Item className={styles.formItem} label="Sort" hasFeedback>
                     {getFieldDecorator('category', {
@@ -116,35 +120,34 @@ class MyEditor extends React.Component {
                       <Select placeholder="Please select categories.">
                         <Option value="Technology">Technology</Option>
                         <Option value="Entertainment">Entertainment</Option>
+                        <Option value="Entertainment">Life</Option>
                         <Option value="Gossip">Gossip</Option>
                       </Select>,
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item className={styles.formItem} label="Label">
-                    {getFieldDecorator('label', {
+                  <Form.Item className={styles.formItem} label="Tag">
+                    {getFieldDecorator('tags', {
                       rules: [
                         {
                           required: true,
-                          message: 'Please select the label!',
+                          message: 'Please select the tag !',
                           type: 'array',
                         },
                       ],
                     })(
                       <Select
                         mode="tags"
-                        // size={size}
-                        placeholder="Please select"
+                        placeholder="Please select the tag."
                         defaultValue={['a10', 'c12']}
-                        // onChange={handleChange}
                         style={{ width: '100%' }}
                       >
                         {children}
                       </Select>,
                     )}
                   </Form.Item>
-                </Col>
+                </Col> 
                 <Col span={8}>
                   <Form.Item label="Desc" className={styles.formItem} hasFeedback>
                     {getFieldDecorator('describe', {

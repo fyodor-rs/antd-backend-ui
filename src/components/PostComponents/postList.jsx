@@ -92,17 +92,14 @@ class postList extends Component {
       {
         title: 'Tags',
         key: 'tags',
-        dataIndex: 'label',
+        dataIndex: 'tags',
         render: labels => (
           <span>
-            {labels.map(tag => {
-              let color = tag.length > 5 ? 'geekblue' : 'green';
-              if (tag === 'loser') {
-                color = 'volcano';
-              }
+            {labels.map((tag,i) => {
+              let color = i%2 ==0 ? 'geekblue' : 'green';
               return (
-                <Tag color={color} key={tag}>
-                  {tag.toUpperCase()}
+                <Tag color={color} key={tag._id}>
+                  {tag.name.toUpperCase()}
                 </Tag>
               );
             })}

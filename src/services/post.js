@@ -28,5 +28,8 @@ export async function deletePost(params) {
   export async function getPostById(params) {
     return request(`/server/post/${params}`)
   }
+  export async function queryTags() {
+    return request(`/server/tag/list`)
+  }
   
   
