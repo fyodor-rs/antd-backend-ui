@@ -118,10 +118,10 @@ class MyEditor extends React.Component {
                       rules: [{ required: true, message: 'Please select categories!' }],
                     })(
                       <Select placeholder="Please select categories.">
-                        <Option value="Technology">Technology</Option>
-                        <Option value="Entertainment">Entertainment</Option>
-                        <Option value="Entertainment">Life</Option>
-                        <Option value="Gossip">Gossip</Option>
+                        <Option value="生活">生活</Option>
+                        <Option value="笔记">笔记</Option>
+                        {/* <Option value="Entertainment">Life</Option>
+                        <Option value="Gossip">Gossip</Option> */}
                       </Select>,
                     )}
                   </Form.Item>
@@ -140,7 +140,6 @@ class MyEditor extends React.Component {
                       <Select
                         mode="tags"
                         placeholder="Please select the tag."
-                        defaultValue={['a10', 'c12']}
                         style={{ width: '100%' }}
                       >
                         {children}
