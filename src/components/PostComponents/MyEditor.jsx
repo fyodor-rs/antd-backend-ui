@@ -2,7 +2,7 @@ import 'braft-editor/dist/index.css';
 import React from 'react';
 import BraftEditor from 'braft-editor';
 import { Button, Card, Form, Modal, Select, Input, Icon, Row, Col } from 'antd';
-import { convertToRaw } from 'draft-js';
+import { convertToRaw,convertFromRaw,EditorState } from 'draft-js';
 import styles from './style.less';
 import { connect } from 'dva';
 import draftToHtml from 'draftjs-to-html';
@@ -27,9 +27,15 @@ class MyEditor extends React.Component {
     postContent: {},
   };
   showModal = () => {
-    this.setState({
+      this.setState({
       visible: true,
     });
+  //   if(this.props.isEdit){
+  //     console.log(this.props.post.htmlContent);
+  //     this.setState({
+  //       editorState: BraftEditor.createEditorState(this.props.post.htmlContent)
+  //   }) 
+  //  }
   };
   handleSubmit = () => {
     this.setState({ loading: true });
@@ -58,9 +64,7 @@ class MyEditor extends React.Component {
   };
 
   handleChange = editorState => {
-    const rawContent = convertToRaw(editorState.getCurrentContent());
-    const htmlContent = draftToHtml(rawContent);
-    this.setState({ editorState });
+    this.setState({ editorState:editorState });
   };
 
   render() {
@@ -71,7 +75,6 @@ class MyEditor extends React.Component {
       wrapperCol: { span: 19 },
     };
     const {tagList} = this.props;
-    console.log(tagList);
     const children=[]
     for (let i = 0; i < tagList.length; i++) {
       children.push(<Option key={tagList[i].name}>{tagList[i].name}</Option>);
@@ -80,7 +83,7 @@ class MyEditor extends React.Component {
       <div style={{ float: 'right', display: 'inline-block' }}>
         <Button onClick={this.showModal}>
           <Icon type="form" />
-          写博客
+          {this.props.isEdit&&this.props.isEdit?'编辑':'写博客'}
         </Button>
 
         <Modal
@@ -161,15 +164,16 @@ class MyEditor extends React.Component {
                 </Col>
               </Row>
             </Card>
+            </Form>
             <Card bodyStyle={{ padding: 0 }}>
               <BraftEditor
                 contentStyle={{ height: 220 }}
                 value={this.state.editorState}
                 onChange={this.handleChange}
                 media={{ uploadFn: fileUtil }}
+                ref={instance => this.editorInstance = instance}
               />
             </Card>
-          </Form>
         </Modal>
       </div>
     );
