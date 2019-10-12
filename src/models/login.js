@@ -24,7 +24,7 @@ const Model = {
       if (response.success) {
         //保存token和用户信息
          let storage=new Storage();
-         storage.setItem('nickname',response.data.nickname,3);
+         storage.setItem('nickname',response.data.nickname,12);
          storage.setItem(response.data.nickname,response.token);
          yield put({
           type: 'changeLoginInfo',
