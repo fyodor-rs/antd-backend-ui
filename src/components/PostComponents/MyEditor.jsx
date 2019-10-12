@@ -118,8 +118,8 @@ class MyEditor extends React.Component {
                       rules: [{ required: true, message: 'Please select categories!' }],
                     })(
                       <Select placeholder="Please select categories.">
-                        <Option value="生活">生活</Option>
-                        <Option value="笔记">笔记</Option>
+                        <Option value="note">note</Option>
+                        <Option value="life">life</Option>
                         {/* <Option value="Entertainment">Life</Option>
                         <Option value="Gossip">Gossip</Option> */}
                       </Select>,
