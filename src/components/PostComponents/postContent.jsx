@@ -18,7 +18,7 @@ class PostContent extends Component {
     return (
       <div>
         <Card>
-          <div style={{wordBreak: 'break-word',whiteSpace: 'pre-wrap'}} dangerouslySetInnerHTML={{ __html: postInfo?postInfo.htmlContent:'' }}></div>
+          <div style={{wordBreak: 'break-word',whiteSpace: 'pre-wrap',overflow:'hidden'}} dangerouslySetInnerHTML={{ __html: postInfo?postInfo.htmlContent:'' }}></div>
           <MyEditor isEdit={true} post={postInfo}/>
         </Card>
       </div>
