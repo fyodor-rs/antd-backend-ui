@@ -69,10 +69,18 @@ const Model = {
       }
     },
 
-    editPost({payload},{call,put}){
-
+    *editPost({payload},{call,put}){
+      const response=  yield call(editPost,payload);
+      if(response.success){
+        yield put({
+          type: 'savePostInfo',
+          payload: response,
+        });
+        message.success(response.message,2);
+      }else{
+        message.error(response.message);
+      }
     }
-
   },
   reducers: {
     savePostList(state, { payload }) {

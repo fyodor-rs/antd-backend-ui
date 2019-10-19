@@ -2,20 +2,18 @@ import 'braft-editor/dist/index.css';
 import React from 'react';
 import BraftEditor from 'braft-editor';
 import { Button, Card, Form, Modal, Select, Input, Icon, Row, Col } from 'antd';
-import { convertToRaw,convertFromRaw,EditorState } from 'draft-js';
 import styles from './style.less';
 import { connect } from 'dva';
-import draftToHtml from 'draftjs-to-html';
 import fileUtil from '@/utils/fileUtil';
 const { Option } = Select;
 const { TextArea } = Input;
 @connect(({ post, user, loading }) => ({
   currentUser: user.currentUser,
-  tagList:post.tagList
+  tagList: post.tagList,
 }))
 class MyEditor extends React.Component {
-  componentDidMount(){
-    const {dispatch}= this.props
+  componentDidMount() {
+    const { dispatch } = this.props;
     dispatch({
       type: 'post/queryTags',
     });
@@ -27,29 +25,31 @@ class MyEditor extends React.Component {
     postContent: {},
   };
   showModal = () => {
-      this.setState({
+    this.setState({
       visible: true,
     });
-  //   if(this.props.isEdit){
-  //     console.log(this.props.post.htmlContent);
-  //     this.setState({
-  //       editorState: BraftEditor.createEditorState(this.props.post.htmlContent)
-  //   }) 
-  //  }
+    if (this.props.isEdit) {
+      const { _id, img, rawContent, htmlContent, likes, views, ...formData } = this.props.post;
+      this.setState({
+        editorState: BraftEditor.createEditorState(htmlContent),
+        postContent: { _id: _id },
+      });
+      const handleFormData = { ...formData, tags: formData.tags.map(tag => tag.name) };
+      this.props.form.setFieldsValue(handleFormData);
+    }
   };
   handleSubmit = () => {
     this.setState({ loading: true });
-    const rawContent = convertToRaw(this.state.editorState.getCurrentContent());
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         Object.assign(this.state.postContent, {
           ...values,
-          rawContent: JSON.stringify(rawContent),
+          rawContent: this.state.editorState.toRAW(),
           htmlContent: this.state.editorState.toHTML(),
           user: this.props.currentUser._id,
         });
         this.props.dispatch({
-          type: 'post/addPost',
+          type: this.props.isEdit ? 'post/editPost' : 'post/addPost',
           payload: this.state.postContent,
         });
         this.setState({ visible: false });
@@ -64,7 +64,7 @@ class MyEditor extends React.Component {
   };
 
   handleChange = editorState => {
-    this.setState({ editorState:editorState });
+    this.setState({ editorState: editorState });
   };
 
   render() {
@@ -74,8 +74,8 @@ class MyEditor extends React.Component {
       labelCol: { span: 5 },
       wrapperCol: { span: 19 },
     };
-    const {tagList} = this.props;
-    const children=[]
+    const { tagList } = this.props;
+    const children = [];
     for (let i = 0; i < tagList.length; i++) {
       children.push(<Option key={tagList[i].name}>{tagList[i].name}</Option>);
     }
@@ -83,7 +83,7 @@ class MyEditor extends React.Component {
       <div style={{ float: 'right', display: 'inline-block' }}>
         <Button onClick={this.showModal}>
           <Icon type="form" />
-          {this.props.isEdit&&this.props.isEdit?'编辑':'写博客'}
+          {this.props.isEdit && this.props.isEdit ? '编辑' : '写博客'}
         </Button>
 
         <Modal
@@ -114,7 +114,7 @@ class MyEditor extends React.Component {
                       rules: [{ required: true, message: 'Please enter the title!' }],
                     })(<Input placeholder="Please enter the title."></Input>)}
                   </Form.Item>
-                </Col>  
+                </Col>
                 <Col span={8}>
                   <Form.Item className={styles.formItem} label="Sort" hasFeedback>
                     {getFieldDecorator('category', {
@@ -149,7 +149,7 @@ class MyEditor extends React.Component {
                       </Select>,
                     )}
                   </Form.Item>
-                </Col> 
+                </Col>
                 <Col span={8}>
                   <Form.Item label="Desc" className={styles.formItem} hasFeedback>
                     {getFieldDecorator('describe', {
@@ -164,16 +164,15 @@ class MyEditor extends React.Component {
                 </Col>
               </Row>
             </Card>
-            </Form>
-            <Card bodyStyle={{ padding: 0 }}>
-              <BraftEditor
-                contentStyle={{ height: 220 }}
-                value={this.state.editorState}
-                onChange={this.handleChange}
-                media={{ uploadFn: fileUtil }}
-                ref={instance => this.editorInstance = instance}
-              />
-            </Card>
+          </Form>
+          <Card bodyStyle={{ padding: 0 }}>
+            <BraftEditor
+              contentStyle={{ height: 220 }}
+              value={this.state.editorState}
+              onChange={this.handleChange}
+              media={{ uploadFn: fileUtil }}
+            />
+          </Card>
         </Modal>
       </div>
     );
