@@ -18,8 +18,8 @@ class PostContent extends Component {
     const {postInfo}=this.props
     return (
       <div>
-        <Card bodyStyle={{textAlign:"center"}}>
-          <h3>{postInfo?postInfo.title:'' }</h3>
+        <Card>
+          <h3 style={{textAlign:"center"}}>{postInfo?postInfo.title:'' }</h3>
           <div className={styles.braftOutputContent} style={{wordBreak: 'break-word',whiteSpace: 'pre-wrap',overflow:'hidden'}} dangerouslySetInnerHTML={{ __html: postInfo?postInfo.htmlContent:'' }}></div>
           <MyEditor isEdit={true} post={postInfo}/>
         </Card>
