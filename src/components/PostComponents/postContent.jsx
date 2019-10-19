@@ -1,7 +1,8 @@
-import react, { Component } from 'react';
-import { Button,Icon, Card } from 'antd';
+import { Component } from 'react';
+import { Icon, Card } from 'antd';
 import { connect } from 'dva';
 import MyEditor from '@/components/PostComponents/myEditor';
+import styles from './style.less';
 @connect(({ post, loading }) => ({
   postInfo:post.post
 }))
@@ -17,8 +18,9 @@ class PostContent extends Component {
     const {postInfo}=this.props
     return (
       <div>
-        <Card>
-          <div style={{wordBreak: 'break-word',whiteSpace: 'pre-wrap',overflow:'hidden'}} dangerouslySetInnerHTML={{ __html: postInfo?postInfo.htmlContent:'' }}></div>
+        <Card bodyStyle={{textAlign:"center"}}>
+          <h3>{postInfo?postInfo.title:'' }</h3>
+          <div className={styles.braftOutputContent} style={{wordBreak: 'break-word',whiteSpace: 'pre-wrap',overflow:'hidden'}} dangerouslySetInnerHTML={{ __html: postInfo?postInfo.htmlContent:'' }}></div>
           <MyEditor isEdit={true} post={postInfo}/>
         </Card>
       </div>

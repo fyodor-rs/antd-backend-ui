@@ -17,7 +17,7 @@ const myUploadFn = (param) => {
         meta: {
           id: file.data.size,
           title:  file.data.originalname,
-          alt: file.data.mimetype,
+          alt: file.data.originalname,
         //   loop: true, // 指定音视频是否循环播放
         //   autoPlay: true, // 指定音视频是否自动播放
         //   controls: true, // 指定音视频是否显示控制栏

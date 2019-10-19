@@ -70,20 +70,20 @@ class MyEditor extends React.Component {
   render() {
     const { visible, loading } = this.state;
     const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 19 },
-    };
-    const { tagList } = this.props;
+    const { tagList,isEdit, post} = this.props;
     const children = [];
     for (let i = 0; i < tagList.length; i++) {
       children.push(<Option key={tagList[i].name}>{tagList[i].name}</Option>);
     }
+    const formItemLayout = {
+      labelCol: { span: 5 },
+      wrapperCol: { span: 19 },
+    };
     return (
       <div style={{ float: 'right', display: 'inline-block' }}>
-        <Button onClick={this.showModal}>
+        <Button onClick={this.showModal} disabled={isEdit && !post}>
           <Icon type="form" />
-          {this.props.isEdit && this.props.isEdit ? '编辑' : '写博客'}
+          {isEdit ? '编辑' : '写博客'}
         </Button>
 
         <Modal
