@@ -20,7 +20,7 @@ const myUploadFn = (param) => {
           alt: file.data.originalname,
         //   loop: true, // 指定音视频是否循环播放
         //   autoPlay: true, // 指定音视频是否自动播放
-        //   controls: true, // 指定音视频是否显示控制栏
+          controls: true, // 指定音视频是否显示控制栏
         //   poster: 'http://xxx/xx.png', // 指定视频播放器的封面
         }
       })

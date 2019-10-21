@@ -16,6 +16,7 @@ import React, { Component } from 'react';
 import styles from './style.less';
 import MyEditor from '@/components/PostComponents/myEditor';
 import { connect } from 'dva';
+import defaultPic from '@/assets/BiazfanxmamNRoxxVxka.png'
 import Link from 'umi/link';
 const { confirm } = Modal;
 const { Search } = Input;
@@ -67,7 +68,7 @@ class postList extends Component {
         key: 'avatar',
         render: text => (
           <a>
-            <Avatar src={text.avatar} />
+            <Avatar src={text?text.avatar:defaultPic} />
           </a>
         ),
       },
@@ -75,7 +76,7 @@ class postList extends Component {
         title: 'Name',
         dataIndex: 'user',
         key: 'name',
-        render: text => <a>{text.nickname}</a>,
+        render: text => <a>{text?text.nickname:'default'}</a>,
       },
       {
         title: 'Title',
@@ -91,16 +92,16 @@ class postList extends Component {
         title: 'Tags',
         key: 'tags',
         dataIndex: 'tags',
-        render: labels => (
+        render: tags => (
           <span>
-            {labels.map((tag, i) => {
+            {tags?tags.map((tag, i) => {
               let color = i % 2 == 0 ? 'geekblue' : 'green';
               return (
                 <Tag color={color} key={tag._id}>
                   {tag.name.toUpperCase()}
                 </Tag>
               );
-            })}
+            }):''}
           </span>
         ),
       },
