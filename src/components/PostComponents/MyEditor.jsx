@@ -90,7 +90,7 @@ class MyEditor extends React.Component {
           visible={visible}
           title="新建"
           width={900}
-          style={{ top: 40, left: 100 }}
+          style={{ top: 15+"%"}}
           bodyStyle={{ padding: 0 }}
           onOk={this.handleOk}
           // closable={true}
