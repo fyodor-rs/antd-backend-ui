@@ -1,11 +1,12 @@
 import React from 'react';
-import { Card, Row, Col, Typography, Alert } from 'antd';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { FormattedMessage } from 'umi-plugin-react/locale';
+import { Card, Row, Col } from 'antd';
+// import { PageHeaderWrapper } from '@ant-design/pro-layout';
+// import { FormattedMessage } from 'umi-plugin-react/locale';
 import Highcharts from '@/components/HomePage/highCharts';
-import { PieEcharts, LineEcharts } from '@/components/HomePage/Echarts';
+import { PieEcharts } from '@/components/HomePage/Echarts';
 import Statistic from '@/components/HomePage/Statistic';
-class Home extends React.Component {
+
+class Home extends React.PureComponent {
   render() {
     return (
       <div>
@@ -34,7 +35,7 @@ class Home extends React.Component {
               </Card>
             </Col>
           </Row>
-          <Card>
+          <Card style={{ marginTop: 14 }}>
             <Highcharts></Highcharts>
           </Card>
         </Card>
@@ -42,4 +43,5 @@ class Home extends React.Component {
     );
   }
 }
+
 export default Home;
