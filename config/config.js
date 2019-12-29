@@ -132,7 +132,7 @@ export default {
             {
               path: '/comment',
               name: 'Comment',
-              icon: 'read',
+              icon: 'message',
               component: './comment',
             },
              {
