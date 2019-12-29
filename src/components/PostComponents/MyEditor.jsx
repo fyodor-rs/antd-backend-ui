@@ -123,7 +123,7 @@ class MyEditor extends React.Component {
                       <Select placeholder="Please select categories.">
                         <Option value="note">note</Option>
                         <Option value="life">life</Option>
-                        <Option value="life">video</Option>
+                        <Option value="video">video</Option>
                       </Select>,
                     )}
                   </Form.Item>
